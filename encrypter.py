@@ -57,5 +57,30 @@ class Encrypter:
                 break
 
 # ====== WORK IN PROGRESS ===== # 
-    def decryptFile(self,file):
-        filename=file
+    def decryptFile(self,encryptedfile):
+        filename=encryptedfile.split('\\')[-1]
+        filename=filename.split(' ')[-1]
+        
+        with open(encryptedfile,'rb') as f:
+            data=f.read()
+            f.close()
+        with open('key/key.key','rb') as f:
+            key=f.read()
+            f.close()
+        
+        file_written=False
+
+        while file_written==False:
+            try:
+                os.makedirs('./Decrypted Files')
+            except FileExistsError:
+                with open('Decrypted Files/{}'.format(filename),'wb') as f:
+                    f.write(Fernet(key).decrypt(data))
+                    f.close()
+                print('File Decrypted.')
+                file_written=True
+                break
+
+Encrypter().decryptFile(r"E:\Programs\Application\Safe Security Encrypter\File-Encrypter\Encrypted Files\Encrypted Safe_Security_Encrypter_screen.py")
+
+
